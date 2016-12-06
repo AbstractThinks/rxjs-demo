@@ -1,18 +1,20 @@
-import { Observable } from 'rxjs/Observable';
-import { Observer } from 'rxjs/Observer';
+// import { Observable } from 'rxjs/Observable';
+// import { Observer } from 'rxjs/Observer';
+import Rx = require('rxjs/Rx');
+
+
 // var Rx = require('rxjs/Rx');
 
 
-let tickStream = Observable.create(function (observer) {
+let tickStream = Rx.Observable.create(function (observer) {
         setInterval(function () {
-                observer.onNext();
+            observer.onNext((new Date()).getTime());
         }, 1000)
 });
 
-let uiRefresher = Observer.create(function () {
-        function next(data) {
-                console.log(data);
-        }
-});
 
-tickStream.subscribe(uiRefresher);
+tickStream.subscribe(
+    x => console.log('Observer got a next value: ' + x),
+    err => console.error('Observer got an error:'+err),
+    () => console.log('Observer got a complete notification')
+);

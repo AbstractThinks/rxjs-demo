@@ -1,13 +1,8 @@
 "use strict";
-var Observable_1 = require("rxjs/Observable");
-var tickStream = Observable_1.Observable.create(function (observer) {
+var Rx = require("rxjs/Rx");
+var tickStream = Rx.Observable.create(function (observer) {
     setInterval(function () {
-        observer.onNext();
+        observer.onNext((new Date()).getTime());
     }, 1000);
 });
-var uiRefresher = Observer.create(function () {
-    function next(data) {
-        console.log(data);
-    }
-});
-tickStream.subscribe(uiRefresher);
+tickStream.subscribe(function (x) { return console.log('Observer got a next value: ' + x); }, function (err) { return console.error('Observer got an error:' + err); }, function () { return console.log('Observer got a complete notification'); });
