@@ -5,4 +5,7 @@ var tickStream = Rx.Observable.create(function (observer) {
         observer.onNext((new Date()).getTime());
     }, 1000);
 });
-tickStream.subscribe(function (x) { return console.log('Observer got a next value: ' + x); }, function (err) { return console.error('Observer got an error:' + err); }, function () { return console.log('Observer got a complete notification'); });
+tickStream.subscribe(
+        function (x) { return console.log('Observer got a next value: ' + x); },
+        function (err) { return console.error('Observer got an error:' + err); },
+        function () { return console.log('Observer got a complete notification'); });

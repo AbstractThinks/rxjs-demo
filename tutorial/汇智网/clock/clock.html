@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html>
+        <head>
+                <meta charset="utf-8">
+                <title></title>
+        </head>
+        <body>
+                <div id='showTime' class="">
+
+                </div>
+                <div id="completed" class="">
+
+                </div>
+        </body>
+        <script src="../../../node_modules/rx/dist/rx.all.js" charset="utf-8"></script>
+        <script type="text/javascript">
+        window.onload = function(){
+                var elClock = document.getElementById("showTime");
+                var getTime =  function(){
+                var _ = ['00','01','02','03','04','05','06','07','08','09'],  //补零
+                      d = new Date(),
+                      h = d.getHours(),
+                      m = d.getMinutes(),
+                      s = d.getSeconds();
+                return [_[h]||h,_[m]||m,_[s]||s].join(":");
+                };
+                var tickStream = Rx.Observable.create(function(observer){
+                        setInterval(function(){
+                            observer.onNext(getTime());
+                        },1000);
+                });
+                var uiRefresher = Rx.Observer.create(function(data){
+                        elClock.textContent = data;
+                });
+                tickStream.subscribe(uiRefresher);
+
+
+                var elClock2 = document.getElementById("completed");
+                var tickStream2 = Rx.Observable.create(function(observer){
+                        var i = 10;
+                        var timer = setInterval(function(){
+                                observer.onNext(i--);
+                                if(i < 0){
+                                        observer.onCompleted();
+                                        clearInterval(timer);
+                                }
+                        },1000);
+                });
+                var uiRefresher = Rx.Observer.create(function(data){
+                        elClock2.textContent = data;
+                },function(err){},function(){
+                        elClock2.classList.add("completed");
+                });
+                tickStream2.subscribe(uiRefresher);
+        }
+        </script>
+</html>
